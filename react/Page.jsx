@@ -110,7 +110,7 @@ const HEALTH = [
 /* Vista previa al compartir. og:image y twitter:image DEBEN ser absolutas:
    con ruta relativa, WhatsApp, LinkedIn y X no las resuelven y el enlace se
    comparte sin imagen. Reemplazar SITIO por el dominio definitivo. */
-export const SITIO = "https://REEMPLAZAR-POR-EL-DOMINIO-DEFINITIVO";
+export const SITIO = "https://estudiowiebke.com.ar";
 
 export const metadata = {
   title: "HERMANN WIEBKE — Abogado",

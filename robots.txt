@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Herramienta interna de decisión tipográfica: no aporta nada en resultados
+# de búsqueda y compite con la página real.
+Disallow: /docs/
+
+Sitemap: https://estudiowiebke.com.ar/sitemap.xml

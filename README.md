@@ -52,28 +52,31 @@ Para actualizar: `git pull`. No hay que reconstruir nada.
 
 ---
 
-## Paso obligatorio antes de publicar
+## Dominio
 
-En `index.html` hay **tres apariciones** de `REEMPLAZAR-POR-EL-DOMINIO-DEFINITIVO`
-(en `og:url`, `og:image` y `twitter:image`). Hay que sustituirlas por el dominio
-real, con `https://` y sin barra final:
+`estudiowiebke.com.ar` — ya escrito en `index.html` (canonical, `og:url`,
+`og:image`, `twitter:image`), en `react/Page.jsx`, en `robots.txt` y en
+`sitemap.xml`. La forma canónica es **sin `www`**: la redirección de
+`www` hacia el dominio pelado se configura en CloudPanel.
+
+Si el dominio cambiara:
 
 ```bash
-sed -i 's|https://REEMPLAZAR-POR-EL-DOMINIO-DEFINITIVO|https://wiebke.com.ar|g' index.html
+grep -rl estudiowiebke.com.ar --include='*.html' --include='*.jsx'      --include='*.xml' --include='*.txt' . | xargs sed -i 's|estudiowiebke.com.ar|NUEVO|g'
 ```
 
-No es opcional: **WhatsApp, LinkedIn y X exigen URL absoluta** en `og:image`.
-Con una ruta relativa el enlace se comparte sin imagen. El marcador está
-escrito así a propósito, para que se note si se olvida en vez de fallar
-en silencio.
+## Después de publicar
 
-Después de publicar, comprobar la vista previa en:
-
-- <https://developers.facebook.com/tools/debug/> — sirve también para WhatsApp
-- <https://www.linkedin.com/post-inspector/>
-
-Ambos cachean: si más adelante se cambia la imagen, hay que forzar el
-refresco desde esas mismas herramientas.
+1. Emitir el certificado con Let's Encrypt (pestaña SSL/TLS) y forzar HTTPS.
+2. Configurar la redirección `www` → sin `www`.
+3. Validar la vista previa al compartir. **Ambas herramientas cachean**, así
+   que si más adelante cambia `og.png` hay que forzar el refresco desde ahí:
+   - <https://developers.facebook.com/tools/debug/> — sirve también para WhatsApp
+   - <https://www.linkedin.com/post-inspector/>
+4. Alta en Google: verificar la propiedad en
+   [Search Console](https://search.google.com/search-console), enviar
+   `https://estudiowiebke.com.ar/sitemap.xml` y pedir la indexación de la
+   portada. Sin esto el sitio tarda semanas en aparecer.
 
 ## Imágenes generadas
 
