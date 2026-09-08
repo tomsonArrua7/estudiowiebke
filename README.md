@@ -52,14 +52,47 @@ Para actualizar: `git pull`. No hay que reconstruir nada.
 
 ---
 
-## Pendientes antes de salir a producción
+## Paso obligatorio antes de publicar
 
-- [ ] **`og.png`** — la vista previa al compartir en WhatsApp, LinkedIn e
-      Instagram. `index.html` la referencia pero **el archivo no existe**:
-      hoy los enlaces se comparten sin imagen. Formato 1200×630.
-- [ ] **`favicon.png`** — también referenciado y ausente.
-- [ ] Revisar que las etiquetas `og:image` y `twitter:image` apunten al
-      dominio definitivo (ver el `TODO` en `index.html`).
+En `index.html` hay **tres apariciones** de `REEMPLAZAR-POR-EL-DOMINIO-DEFINITIVO`
+(en `og:url`, `og:image` y `twitter:image`). Hay que sustituirlas por el dominio
+real, con `https://` y sin barra final:
+
+```bash
+sed -i 's|https://REEMPLAZAR-POR-EL-DOMINIO-DEFINITIVO|https://wiebke.com.ar|g' index.html
+```
+
+No es opcional: **WhatsApp, LinkedIn y X exigen URL absoluta** en `og:image`.
+Con una ruta relativa el enlace se comparte sin imagen. El marcador está
+escrito así a propósito, para que se note si se olvida en vez de fallar
+en silencio.
+
+Después de publicar, comprobar la vista previa en:
+
+- <https://developers.facebook.com/tools/debug/> — sirve también para WhatsApp
+- <https://www.linkedin.com/post-inspector/>
+
+Ambos cachean: si más adelante se cambia la imagen, hay que forzar el
+refresco desde esas mismas herramientas.
+
+## Imágenes generadas
+
+`og.png` y los iconos se construyen con `tools/generar-imagenes.py`, a partir
+de los PNG de `logos/` e Inter variable. Para rehacerlos:
+
+```bash
+python tools/generar-imagenes.py
+```
+
+| Archivo                 | Medida    | Uso                                  |
+| ----------------------- | --------- | ------------------------------------ |
+| `og.png`                | 1200×630  | Vista previa al compartir            |
+| `favicon.png`           | 512×512   | Icono general                        |
+| `favicon-32.png`        | 32×32     | Pestaña del navegador                |
+| `apple-touch-icon.png`  | 180×180   | Pantalla de inicio en iOS            |
+
+El monograma HW es apaisado y de trazo fino: por debajo de 24 px pierde
+definición. Es una limitación de la marca, no del archivo.
 
 ## Notas de mantenimiento
 

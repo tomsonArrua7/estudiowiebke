@@ -107,6 +107,46 @@ const HEALTH = [
   ]],
 ];
 
+/* Vista previa al compartir. og:image y twitter:image DEBEN ser absolutas:
+   con ruta relativa, WhatsApp, LinkedIn y X no las resuelven y el enlace se
+   comparte sin imagen. Reemplazar SITIO por el dominio definitivo. */
+export const SITIO = "https://REEMPLAZAR-POR-EL-DOMINIO-DEFINITIVO";
+
+export const metadata = {
+  title: "HERMANN WIEBKE — Abogado",
+  description:
+    "Asesoramiento jurídico en asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales en La Plata.",
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    siteName: "HERMANN WIEBKE — Abogado",
+    url: `${SITIO}/`,
+    title: "HERMANN WIEBKE — Abogado",
+    description: "Derecho, urbanismo y operaciones inmobiliarias en La Plata.",
+    images: [{
+      url: `${SITIO}/og.png`,
+      width: 1200,
+      height: 630,
+      type: "image/png",
+      alt: "WIEBKE — Decisiones que requieren claridad.",
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HERMANN WIEBKE — Abogado",
+    description: "Derecho, urbanismo y operaciones inmobiliarias en La Plata.",
+    images: [`${SITIO}/og.png`],
+  },
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  themeColor: "#1B2632",
+};
+
 export default function Page() {
   return (
     <>

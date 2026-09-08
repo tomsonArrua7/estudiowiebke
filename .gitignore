@@ -8,3 +8,6 @@ Brief-web-WIEBKE.docx
 Thumbs.db
 desktop.ini
 node_modules/
+
+# Inter TTF: lo descarga tools/generar-imagenes.py si falta. No se versiona.
+tools/InterVar.ttf
