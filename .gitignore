@@ -1,0 +1,10 @@
+# El brief es documentación interna del cliente y este repositorio es público.
+# Si querés versionarlo, quitá esta línea — pero pasá el repo a privado antes.
+Brief-web-WIEBKE.docx
+
+# Local
+.claude/
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/

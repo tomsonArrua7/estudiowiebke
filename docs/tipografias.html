@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WIEBKE — Comparación tipográfica</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Archivo:wght@400;500;700&family=Public+Sans:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --palladian:#EEE9DF; --oatmeal:#C9C1B1; --blue-fantastic:#2C3B4D;
+  --abyssal:#1B2632; --truffle:#A35139; --burning-flame:#FFB162;
+  --ink-soft:#1B2632B8; --rule:#1B26322E;
+  --editorial:"Times New Roman", Times, serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; background:var(--palladian); color:var(--abyssal);
+  font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height:1.75; -webkit-font-smoothing:antialiased;
+}
+.shell{width:min(1180px,100% - 48px);margin-inline:auto}
+
+header{border-bottom:1px solid var(--rule);padding:56px 0 34px;margin-bottom:56px}
+.eyebrow{
+  margin:0 0 22px; font-size:11px; font-weight:700; line-height:1;
+  letter-spacing:.26em; text-transform:uppercase; color:var(--truffle);
+}
+header h1{
+  margin:0 0 20px; font-size:clamp(38px,5vw,62px); font-weight:400;
+  line-height:.98; letter-spacing:-.04em; max-width:16ch;
+}
+header p{margin:0;max-width:62ch;color:var(--ink-soft);font-size:16px}
+
+/* --- Muestra ---------------------------------------------------------- */
+.muestra{
+  border-top:1px solid var(--abyssal);
+  padding:44px 0 60px;
+  margin-bottom:8px;
+}
+.ficha{
+  display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;
+  margin-bottom:40px;
+}
+.ficha h2{
+  margin:0; font-size:19px; font-weight:700; line-height:1;
+  letter-spacing:.02em;
+}
+.etiqueta{
+  font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  padding:6px 10px; background:var(--abyssal); color:var(--palladian);
+}
+.etiqueta.gratis{background:var(--truffle)}
+.ficha p{margin:0;flex:1 1 320px;min-width:260px;color:var(--ink-soft);font-size:14px;line-height:1.6}
+
+/* El bloque que cambia de fuente */
+.spec{ display:grid; grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+       gap:clamp(32px,5vw,72px); align-items:start }
+.spec .display{
+  margin:0; font-size:clamp(44px,5.4vw,76px); font-weight:400;
+  line-height:.92; letter-spacing:-.045em;
+}
+.spec .display em{
+  display:block; font-family:var(--editorial); font-style:italic;
+  color:var(--truffle); letter-spacing:-.02em;
+}
+.spec .cuerpo{margin:26px 0 0;max-width:48ch;color:var(--ink-soft);font-size:16px;line-height:1.75}
+
+.tarjeta{border-top:1px solid var(--rule);padding-top:26px;display:grid;grid-template-columns:auto 1fr;gap:26px}
+.tarjeta .num{font-size:44px;font-weight:700;line-height:.78;letter-spacing:-.03em;color:var(--truffle);font-variant-numeric:tabular-nums}
+.tarjeta h3{margin:0 0 14px;font-size:25px;font-weight:500;line-height:1.16;letter-spacing:-.018em}
+.tarjeta p{margin:0;color:var(--ink-soft);font-size:16px;line-height:1.65}
+.versales{margin-top:30px;font-size:11px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--truffle)}
+
+/* Cada muestra fija su propia familia */
+.f-sistema .spec, .f-sistema .tarjeta, .f-sistema .versales{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+.f-inter   .spec, .f-inter   .tarjeta, .f-inter   .versales{font-family:"Inter",sans-serif}
+.f-archivo .spec, .f-archivo .tarjeta, .f-archivo .versales{font-family:"Archivo",sans-serif}
+.f-public  .spec, .f-public  .tarjeta, .f-public  .versales{font-family:"Public Sans",sans-serif}
+
+footer{border-top:1px solid var(--abyssal);margin-top:40px;padding:44px 0 90px}
+footer h2{margin:0 0 24px;font-size:26px;font-weight:400;letter-spacing:-.03em}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:14px 16px 14px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--truffle)}
+td:first-child{font-weight:700;white-space:nowrap}
+.nota{margin-top:32px;max-width:70ch;color:var(--ink-soft);font-size:15px;line-height:1.7}
+.tabla-scroll{overflow-x:auto}
+
+@media (max-width:760px){
+  .spec{grid-template-columns:1fr;gap:36px}
+  .tarjeta{grid-template-columns:auto 1fr;gap:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<header>
+  <p class="eyebrow">WIEBKE / Decisión tipográfica</p>
+  <h1>La misma página, cuatro tipografías.</h1>
+  <p>El brief pide Helvetica Neue. En Mac se ve tal cual; en Windows y Android el navegador la sustituye por Arial y Roboto, que es lo que ve la mayor parte del público de La Plata. Abajo está el mismo bloque de portada y la misma ficha de servicio compuestos con cada opción, para juzgarlos en esta pantalla y no de memoria. La primera muestra es lo que se ve hoy.</p>
+</header>
+
+<!-- 1 -->
+<section class="muestra f-sistema">
+  <div class="ficha">
+    <h2>Helvetica Neue del sistema</h2>
+    <span class="etiqueta">Lo que se ve hoy</span>
+    <p>Sin fuente cargada. En Mac es Helvetica Neue auténtica; en Windows cae a Arial y en Android a Roboto. Coste cero, resultado impredecible: la página se ve distinta según el equipo.</p>
+  </div>
+  <div class="spec">
+    <div>
+      <p class="display">Decisiones que requieren <em>claridad.</em></p>
+      <p class="cuerpo">Abordaje integral de asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales. Análisis del problema, sus riesgos y las alternativas posibles.</p>
+      <p class="versales">01 / Áreas de consulta</p>
+    </div>
+    <div class="tarjeta">
+      <span class="num">05</span>
+      <div>
+        <h3>Derecho urbanístico y administrativo</h3>
+        <p>Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="muestra f-inter">
+  <div class="ficha">
+    <h2>Inter</h2>
+    <span class="etiqueta gratis">Gratis · recomendada si no hay presupuesto</span>
+    <p>Grotesca dibujada para pantalla, con altura de x generosa y numerales tabulares reales. No es Helvetica: es su prima moderna. Muy legible en cuerpos chicos y sólida en titulares. Su riesgo es la ubicuidad — está en medio internet.</p>
+  </div>
+  <div class="spec">
+    <div>
+      <p class="display">Decisiones que requieren <em>claridad.</em></p>
+      <p class="cuerpo">Abordaje integral de asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales. Análisis del problema, sus riesgos y las alternativas posibles.</p>
+      <p class="versales">01 / Áreas de consulta</p>
+    </div>
+    <div class="tarjeta">
+      <span class="num">05</span>
+      <div>
+        <h3>Derecho urbanístico y administrativo</h3>
+        <p>Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="muestra f-archivo">
+  <div class="ficha">
+    <h2>Archivo</h2>
+    <span class="etiqueta gratis">Gratis</span>
+    <p>Grotesca de origen tipográfico americano, algo más estrecha y con más carácter que Inter. Gana presencia en titulares grandes y se distingue más; a cambio se aleja algo más del espíritu suizo del brief.</p>
+  </div>
+  <div class="spec">
+    <div>
+      <p class="display">Decisiones que requieren <em>claridad.</em></p>
+      <p class="cuerpo">Abordaje integral de asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales. Análisis del problema, sus riesgos y las alternativas posibles.</p>
+      <p class="versales">01 / Áreas de consulta</p>
+    </div>
+    <div class="tarjeta">
+      <span class="num">05</span>
+      <div>
+        <h3>Derecho urbanístico y administrativo</h3>
+        <p>Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="muestra f-public">
+  <div class="ficha">
+    <h2>Public Sans</h2>
+    <span class="etiqueta gratis">Gratis</span>
+    <p>Derivada de Libre Franklin, desarrollada para el gobierno de EE.&nbsp;UU. Tono institucional y neutro, pensada para documentos oficiales. Menos afilada que Inter en titulares grandes.</p>
+  </div>
+  <div class="spec">
+    <div>
+      <p class="display">Decisiones que requieren <em>claridad.</em></p>
+      <p class="cuerpo">Abordaje integral de asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales. Análisis del problema, sus riesgos y las alternativas posibles.</p>
+      <p class="versales">01 / Áreas de consulta</p>
+    </div>
+    <div class="tarjeta">
+      <span class="num">05</span>
+      <div>
+        <h3>Derecho urbanístico y administrativo</h3>
+        <p>Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h2>Las licenciadas, que no puedo mostrar acá</h2>
+  <div class="tabla-scroll">
+  <table>
+    <thead>
+      <tr><th>Familia</th><th>Foundry</th><th>Orden de precio (web)</th><th>Por qué</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Neue Haas Grotesk</td>
+        <td>Monotype</td>
+        <td>USD 300–600</td>
+        <td>Es la Helvetica original de 1957 redibujada por Christian Schwartz, con cortes ópticos Display y Text separados. Es literalmente lo que el brief está pidiendo, hecho bien. Mi recomendación si hay presupuesto.</td>
+      </tr>
+      <tr>
+        <td>Helvetica Now</td>
+        <td>Monotype</td>
+        <td>USD 300–600</td>
+        <td>La revisión oficial de Helvetica. Tres cortes ópticos: Micro, Text y Display. El Micro resuelve muy bien los antetítulos de 11&nbsp;px del sistema.</td>
+      </tr>
+      <tr>
+        <td>Söhne</td>
+        <td>Klim Type Foundry</td>
+        <td>USD 250–500</td>
+        <td>Helvetica reinterpretada desde el recuerdo, no desde el original. Es la que da ese aire de estudio caro. Se aparta del brief con elegancia, no por descuido.</td>
+      </tr>
+      <tr>
+        <td>Nimbus Sans</td>
+        <td>URW</td>
+        <td>Gratis (OFL)</td>
+        <td>Métricamente compatible con Helvetica: sustituye sin mover ni una línea. Calidad correcta para texto, algo pobre en titulares de 100&nbsp;px.</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <p class="nota"><strong>Mi recomendación:</strong> Neue Haas Grotesk Display para titulares y Text para cuerpo. Es fiel al brief, resuelve el problema de Windows y es la decisión que sostiene el resto del sistema. Si el presupuesto es cero, Inter — que es lo que está montado ahora mismo en la maqueta. Cambiar entre una y otra es una sola línea en <code>styles.css</code>: la variable <code>--font-sans</code>. Ninguna otra regla depende del nombre de la fuente.</p>
+</footer>
+
+</div>
+</body>
+</html>

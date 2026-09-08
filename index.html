@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>HERMANN WIEBKE — Abogado</title>
+<meta name="description" content="Asesoramiento jurídico en asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales en La Plata.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:title" content="HERMANN WIEBKE — Abogado">
+<meta property="og:description" content="Derecho, urbanismo y operaciones inmobiliarias en La Plata.">
+<!-- TODO: apuntar al dominio definitivo. En producción el og:image apunta a otro host y no resuelve. -->
+<meta property="og:image" content="/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="HERMANN WIEBKE — Abogado">
+<meta name="twitter:description" content="Derecho, urbanismo y operaciones inmobiliarias en La Plata.">
+<meta name="twitter:image" content="/og.png">
+<link rel="icon" href="/favicon.png">
+
+<!-- Marca la presencia de JS antes del primer pintado: sin JS el contenido
+     se muestra sin apariciones, nunca oculto. -->
+<script>document.documentElement.classList.add('js')</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Inter variable con eje óptico: un archivo (71 KB) en lugar de tres (141 KB).
+     font-optical-sizing:auto usa el corte de texto a 16 px y el de titular a 100 px. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..700&display=swap">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOMO — índice fijo del documento (sólo escritorio) -->
+<aside class="spine" aria-label="Índice del documento">
+  <a class="spine-mark" href="#inicio" aria-label="Volver al inicio">
+    <img src="logos/WIEBKE-monograma-HW-claro.png" alt="" aria-hidden="true" width="26" height="12">
+  </a>
+  <nav class="spine-index">
+    <a href="#areas" data-spine="areas">01</a>
+    <a href="#sanitario" data-spine="sanitario">02</a>
+    <a href="#contacto" data-spine="contacto">03</a>
+  </nav>
+  <span class="spine-foot">La Plata · Buenos Aires</span>
+  <span class="spine-progress" aria-hidden="true"></span>
+</aside>
+
+<main>
+
+  <!-- Ancla de retorno. Va aquí, y no sobre el encabezado, porque el
+       encabezado es sticky: cuando está pegado ya está a la vista, y el
+       navegador entonces considera que no hay nada que desplazar y no se
+       mueve. Este tramo de altura cero sí está en el origen del documento. -->
+  <span id="inicio" aria-hidden="true"></span>
+
+  <!-- 01 — ENCABEZADO -->
+  <div class="masthead-bleed bleed">
+    <header class="masthead page-shell">
+      <a class="brand" href="#inicio" aria-label="WIEBKE — volver al inicio">
+        <span class="brand-lockup">
+          <img src="logos/WIEBKE-logo-principal-oscuro.png" alt="WIEBKE" width="184" height="32">
+          <span>Hermann Wiebke · Abogado</span>
+        </span>
+      </a>
+      <span class="location">La Plata · Buenos Aires</span>
+    </header>
+  </div>
+
+  <!-- 02 — PORTADA -->
+  <section class="hero page-shell">
+    <div class="hero-copy" data-reveal>
+      <p class="eyebrow" data-stagger style="--d:0ms">Asesoramiento jurídico</p>
+
+      <!-- Acento editorial autorizado 1/4 -->
+      <h1 data-stagger style="--d:90ms">Decisiones que requieren <em class="editorial">claridad.</em></h1>
+
+      <p class="hero-text" data-stagger style="--d:180ms">Abordaje integral de asuntos patrimoniales, inmobiliarios, urbanísticos y ambientales. Análisis del problema, sus riesgos y las alternativas posibles.</p>
+
+      <div class="hero-actions" data-stagger style="--d:260ms">
+        <a class="action" data-consulta href="https://wa.me/5492216775075?text=Hola%20Hermann%2C%20quisiera%20hacerte%20una%20consulta%20jur%C3%ADdica." target="_blank" rel="noreferrer">
+          <svg class="whatsapp-mark" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 3.7A11.67 11.67 0 0 0 12.02.28C5.57.28.32 5.53.32 11.98c0 2.06.54 4.08 1.56 5.85L.22 23.9l6.21-1.63a11.7 11.7 0 0 0 5.59 1.42h.01c6.45 0 11.7-5.25 11.7-11.7 0-3.13-1.22-6.07-3.43-8.28Zm-8.27 18.01a9.72 9.72 0 0 1-4.96-1.36l-.36-.21-3.68.97.98-3.59-.23-.37a9.7 9.7 0 0 1-1.48-5.17c0-5.36 4.36-9.72 9.73-9.72 2.6 0 5.04 1.01 6.87 2.85a9.65 9.65 0 0 1 2.85 6.88c0 5.36-4.37 9.72-9.72 9.72Zm5.33-7.28c-.29-.15-1.73-.85-2-.95-.27-.1-.46-.15-.66.15-.19.29-.75.95-.92 1.14-.17.2-.34.22-.63.08-.29-.15-1.23-.45-2.34-1.45a8.8 8.8 0 0 1-1.62-2.02c-.17-.29-.02-.45.13-.59.13-.13.29-.34.44-.51.14-.17.19-.29.29-.49.1-.19.05-.36-.03-.51-.07-.15-.65-1.58-.9-2.16-.23-.57-.47-.49-.65-.5h-.56c-.2 0-.51.08-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.19 3.02.15.19 2.06 3.14 4.99 4.41.7.3 1.24.48 1.66.61.7.22 1.34.19 1.85.12.56-.08 1.73-.71 1.97-1.39.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34Z"/></svg>
+          Consultar por WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <!-- Columna de apoyo: puramente tipográfica, sin monograma ni planos. -->
+    <div class="hero-system" data-reveal>
+      <div class="hero-disciplines">
+        <span><i>01</i> Derecho</span>
+        <span><i>02</i> Urbanismo</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — ÁREAS DE CONSULTA -->
+  <section class="services page-shell" id="areas" aria-labelledby="services-title">
+    <div class="section-heading" data-reveal>
+      <div>
+        <p class="eyebrow">01 / Áreas de consulta</p>
+        <h2 id="services-title">¿En qué puedo ayudarte?</h2>
+      </div>
+      <!-- Acento editorial autorizado 2/4 -->
+      <p class="section-note editorial">Criterio, estructura y medida.</p>
+    </div>
+
+    <div class="service-grid">
+      <article class="service-card" data-reveal>
+        <span class="service-number">01</span>
+        <div>
+          <h3>Sucesiones e inmuebles</h3>
+          <p>Declaratorias, particiones, regularización y disposición de bienes heredados.</p>
+        </div>
+      </article>
+      <article class="service-card" data-reveal>
+        <span class="service-number">02</span>
+        <div>
+          <h3>Compraventas y escrituración</h3>
+          <p>Revisión documental, boletos, escrituras y seguridad jurídica de la operación.</p>
+        </div>
+      </article>
+      <article class="service-card" data-reveal>
+        <span class="service-number">03</span>
+        <div>
+          <h3>Alquileres y contratos</h3>
+          <p>Redacción, revisión, cumplimiento y resolución de conflictos contractuales.</p>
+        </div>
+      </article>
+      <article class="service-card" data-reveal>
+        <span class="service-number">04</span>
+        <div>
+          <h3>Propiedad y ocupaciones</h3>
+          <p>Conflictos posesorios, recupero de inmuebles y análisis de vías de regularización.</p>
+        </div>
+      </article>
+      <article class="service-card" data-reveal>
+        <span class="service-number">05</span>
+        <div>
+          <h3>Derecho urbanístico y administrativo</h3>
+          <p>Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración.</p>
+        </div>
+      </article>
+      <article class="service-card" data-reveal>
+        <span class="service-number">06</span>
+        <div>
+          <h3>Cuestiones ambientales</h3>
+          <p>Asesoramiento sobre regulación, autorizaciones y conflictos de incidencia ambiental.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 04 — ÁREA ESPECIALIZADA · quiebre de capítulo a sangre -->
+  <section class="health-band bleed" id="sanitario" aria-labelledby="health-title">
+    <div class="health-practice page-shell">
+      <div class="health-heading" data-reveal>
+        <p class="eyebrow">02 / Área especializada</p>
+        <!-- Acento editorial autorizado 3/4 -->
+        <h2 id="health-title">Derecho sanitario <em class="editorial">y arquitectura</em></h2>
+        <p class="health-intro">Asesoramiento integral para el proyecto, habilitación y funcionamiento de establecimientos de salud.</p>
+      </div>
+
+      <div class="health-services" data-reveal>
+        <article>
+          <span>01</span>
+          <div>
+            <h3>Asesoramiento jurídico-arquitectónico de proyectos sanitarios</h3>
+            <p>Acompañamos a propietarios, inversores, arquitectos y equipos técnicos desde las primeras etapas del proyecto, analizando su factibilidad normativa, sanitaria y edilicia.</p>
+            <p>Evaluamos la categoría y prestaciones del establecimiento y traducimos las exigencias regulatorias en criterios concretos de diseño, organización y funcionamiento, procurando anticipar adecuaciones y contingencias antes de ejecutar la inversión.</p>
+          </div>
+        </article>
+        <article>
+          <span>02</span>
+          <div>
+            <h3>Habilitación, regularización y gestión sanitaria</h3>
+            <p>Asistimos en habilitaciones, ampliaciones, reformas, incorporación de servicios y modificaciones de establecimientos asistenciales ante el Ministerio de Salud de la Provincia de Buenos Aires.</p>
+            <p>Asimismo, asesoramos a establecimientos en funcionamiento frente a requerimientos regulatorios, inspecciones, procesos de adecuación, regularización y procedimientos administrativos sancionatorios.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 — PRIMERA CONVERSACIÓN -->
+  <section class="contact-wrap bleed" id="contacto">
+    <div class="contact page-shell" aria-labelledby="contact-title">
+      <div data-reveal>
+        <p class="eyebrow">03 / Primera conversación</p>
+        <!-- Acento editorial autorizado 4/4 -->
+        <h2 id="contact-title">Contame brevemente <em class="editorial">tu situación.</em></h2>
+      </div>
+      <div class="contact-action" data-reveal>
+        <p>Escribime por WhatsApp para realizar una primera orientación y, si corresponde, coordinar una entrevista.</p>
+        <a class="action" data-consulta href="https://wa.me/5492216775075?text=Hola%20Hermann%2C%20quisiera%20hacerte%20una%20consulta%20jur%C3%ADdica." target="_blank" rel="noreferrer">
+          <svg class="whatsapp-mark" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 3.7A11.67 11.67 0 0 0 12.02.28C5.57.28.32 5.53.32 11.98c0 2.06.54 4.08 1.56 5.85L.22 23.9l6.21-1.63a11.7 11.7 0 0 0 5.59 1.42h.01c6.45 0 11.7-5.25 11.7-11.7 0-3.13-1.22-6.07-3.43-8.28Zm-8.27 18.01a9.72 9.72 0 0 1-4.96-1.36l-.36-.21-3.68.97.98-3.59-.23-.37a9.7 9.7 0 0 1-1.48-5.17c0-5.36 4.36-9.72 9.73-9.72 2.6 0 5.04 1.01 6.87 2.85a9.65 9.65 0 0 1 2.85 6.88c0 5.36-4.37 9.72-9.72 9.72Zm5.33-7.28c-.29-.15-1.73-.85-2-.95-.27-.1-.46-.15-.66.15-.19.29-.75.95-.92 1.14-.17.2-.34.22-.63.08-.29-.15-1.23-.45-2.34-1.45a8.8 8.8 0 0 1-1.62-2.02c-.17-.29-.02-.45.13-.59.13-.13.29-.34.44-.51.14-.17.19-.29.29-.49.1-.19.05-.36-.03-.51-.07-.15-.65-1.58-.9-2.16-.23-.57-.47-.49-.65-.5h-.56c-.2 0-.51.08-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.19 3.02.15.19 2.06 3.14 4.99 4.41.7.3 1.24.48 1.66.61.7.22 1.34.19 1.85.12.56-.08 1.73-.71 1.97-1.39.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34Z"/></svg>
+          Iniciar consulta
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 — PIE -->
+  <footer>
+    <div class="page-shell footer-inner">
+      <a class="brand" href="#inicio" aria-label="WIEBKE — volver al inicio">
+        <span class="brand-lockup">
+          <img src="logos/WIEBKE-logo-principal-claro.png" alt="WIEBKE" width="152" height="27">
+          <span>Hermann Wiebke · Abogado</span>
+        </span>
+      </a>
+      <p>El envío de un mensaje no implica la aceptación del caso ni constituye por sí solo una relación profesional.</p>
+      <div class="footer-end">
+        <span class="footer-year">© 2026</span>
+        <a class="to-top" href="#inicio"><span aria-hidden="true">↑</span> Volver arriba</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="action mobile-whatsapp" id="cta-fija" href="https://wa.me/5492216775075?text=Hola%20Hermann%2C%20quisiera%20hacerte%20una%20consulta%20jur%C3%ADdica." target="_blank" rel="noreferrer" aria-label="Consultar por WhatsApp">
+    <svg class="whatsapp-mark" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 3.7A11.67 11.67 0 0 0 12.02.28C5.57.28.32 5.53.32 11.98c0 2.06.54 4.08 1.56 5.85L.22 23.9l6.21-1.63a11.7 11.7 0 0 0 5.59 1.42h.01c6.45 0 11.7-5.25 11.7-11.7 0-3.13-1.22-6.07-3.43-8.28Zm-8.27 18.01a9.72 9.72 0 0 1-4.96-1.36l-.36-.21-3.68.97.98-3.59-.23-.37a9.7 9.7 0 0 1-1.48-5.17c0-5.36 4.36-9.72 9.73-9.72 2.6 0 5.04 1.01 6.87 2.85a9.65 9.65 0 0 1 2.85 6.88c0 5.36-4.37 9.72-9.72 9.72Zm5.33-7.28c-.29-.15-1.73-.85-2-.95-.27-.1-.46-.15-.66.15-.19.29-.75.95-.92 1.14-.17.2-.34.22-.63.08-.29-.15-1.23-.45-2.34-1.45a8.8 8.8 0 0 1-1.62-2.02c-.17-.29-.02-.45.13-.59.13-.13.29-.34.44-.51.14-.17.19-.29.29-.49.1-.19.05-.36-.03-.51-.07-.15-.65-1.58-.9-2.16-.23-.57-.47-.49-.65-.5h-.56c-.2 0-.51.08-.78.37-.27.29-1.02 1-1.02 2.43 0 1.44 1.05 2.82 1.19 3.02.15.19 2.06 3.14 4.99 4.41.7.3 1.24.48 1.66.61.7.22 1.34.19 1.85.12.56-.08 1.73-.71 1.97-1.39.24-.68.24-1.26.17-1.38-.07-.12-.26-.19-.55-.34Z"/></svg>
+    Consultar por WhatsApp
+  </a>
+
+</main>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var soporta = 'IntersectionObserver' in window;
+
+  /* --- Apariciones al entrar en pantalla ------------------------------- */
+  var piezas = document.querySelectorAll('[data-reveal]');
+  if (reduce || !soporta) {
+    piezas.forEach(function (el) { el.classList.add('is-in'); });
+  } else {
+    var obsReveal = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-in');
+        obsReveal.unobserve(e.target);   /* se revela una sola vez */
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+    piezas.forEach(function (el) { obsReveal.observe(el); });
+  }
+
+  /* --- Botón fijo: sólo cuando no hay otro botón de consulta a la vista.
+         Evita mostrar la misma acción dos veces en la misma pantalla. --- */
+  var fija = document.getElementById('cta-fija');
+  var inline = document.querySelectorAll('[data-consulta]');
+  if (fija && inline.length && soporta) {
+    var visibles = new Set();
+    var obsCta = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) visibles.add(e.target); else visibles.delete(e.target);
+      });
+      fija.classList.toggle('is-visible', visibles.size === 0);
+    }, { threshold: 0 });
+    inline.forEach(function (el) { obsCta.observe(el); });
+  } else if (fija) {
+    fija.classList.add('is-visible');
+  }
+
+
+  /* --- Regreso a la portada -------------------------------------------
+     El href="#inicio" queda como respaldo sin JS, pero se intercepta: si el
+     fragmento ya es #inicio, el navegador considera que no hay nada que
+     hacer y el segundo clic no responde. Desplazando a mano funciona
+     siempre, y además no deja el fragmento colgado en la barra. */
+  var retornos = document.querySelectorAll('a[href="#inicio"]');
+  retornos.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      if (window.history && history.replaceState) {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    });
+  });
+
+  /* --- Encabezado condensado + posición de lectura + índice activo.
+         Un único listener de scroll, servido por rAF: el trabajo se hace
+         una vez por cuadro, no una vez por evento. --------------------- */
+  var membrete = document.querySelector('.masthead-bleed');
+  var filamento = document.querySelector('.spine-progress');
+  var enlaces = [].slice.call(document.querySelectorAll('[data-spine]'));
+  var secciones = enlaces.map(function (a) {
+    return document.getElementById(a.getAttribute('data-spine'));
+  });
+  var pendiente = false;
+  var condensado = false;
+
+  function pintar() {
+    pendiente = false;
+    var y = window.scrollY;
+
+    /* Histéresis: dos umbrales separados por más que los 54 px que el
+       encabezado pierde al condensarse, para que el reacomodo no pueda
+       devolvernos al otro lado del umbral y entrar en bucle. */
+    if (membrete) {
+      if (!condensado && y > 140) { condensado = true; membrete.classList.add('is-condensed'); }
+      else if (condensado && y < 60) { condensado = false; membrete.classList.remove('is-condensed'); }
+    }
+
+    if (filamento) {
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var p = total > 0 ? Math.min(1, Math.max(0, y / total)) : 0;
+      filamento.style.setProperty('--p', (p * 100).toFixed(2) + '%');
+    }
+
+    /* Sección activa: la última cuyo inicio ya cruzó el tercio superior. */
+    if (enlaces.length) {
+      var activa = -1, umbral = y + window.innerHeight * 0.34;
+      for (var i = 0; i < secciones.length; i++) {
+        if (secciones[i] && secciones[i].offsetTop <= umbral) activa = i;
+      }
+      enlaces.forEach(function (a, i) {
+        if (i === activa) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }
+  }
+
+  function alDesplazar() {
+    if (pendiente) return;
+    pendiente = true;
+    requestAnimationFrame(pintar);
+  }
+
+  window.addEventListener('scroll', alDesplazar, { passive: true });
+  window.addEventListener('resize', alDesplazar, { passive: true });
+  pintar();
+})();
+</script>
+</body>
+</html>

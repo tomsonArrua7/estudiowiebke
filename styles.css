@@ -1,0 +1,916 @@
+/* ==========================================================================
+   WIEBKE — Sistema visual
+   Hermann Wiebke · Abogado — Derecho / Urbanismo
+   Implementación del Brief v1.0 (Septiembre 2026)
+
+   REGLAS NO NEGOCIABLES
+   1. Paleta cerrada: sólo los seis colores del manual (y alfas de ellos).
+      Prohibido: verdes, dorados, degradados, sombras ornamentales.
+   2. Times New Roman Italic SÓLO en las cuatro expresiones autorizadas,
+      marcadas con .editorial en el HTML.
+   3. La jerarquía la construyen el vacío y la proporción, no el adorno.
+
+   TESIS DE COMPOSICIÓN
+   El sitio no es una pila de bandas: es un documento encuadernado. Un lomo
+   Abyssal fijo en el canto izquierdo sostiene la marca, el índice y la
+   posición de lectura. La página se despliega a su derecha. Toda la
+   jerarquía se construye con tres materiales: el filete, el número y el
+   vacío. No hay un cuarto.
+   ========================================================================== */
+
+:root{
+  /* ---- Paleta cromática (06 / IDENTIDAD VISUAL) ------------------------ */
+  --palladian:       #EEE9DF;  /* Fondo principal y aire editorial          */
+  --oatmeal:         #C9C1B1;  /* Planos secundarios y sección de contacto  */
+  --blue-fantastic:  #2C3B4D;  /* Superficies institucionales / hover       */
+  --abyssal:         #1B2632;  /* Texto, botones, área sanitaria y pie      */
+  --truffle:         #A35139;  /* Cursivas editoriales, antetítulos, nº     */
+  --burning-flame:   #FFB162;  /* Acento mínimo sobre fondos oscuros        */
+
+  /* ---- Derivados: exclusivamente alfa sobre los seis anteriores -------- */
+  --ink:             var(--abyssal);
+  --ink-soft:        #1B2632B8;  /* Abyssal 72% — texto corrido sobre claro */
+  --ink-faint:       #1B26327A;  /* Abyssal 48% — metadatos                 */
+  --rule:            #1B26322E;  /* Abyssal 18% — filete sobre claro (brief)*/
+  --rule-dark:       #EEE9DF3D;  /* Palladian 24% — filete sobre oscuro     */
+  --paper-soft:      #EEE9DFC7;  /* Palladian 78% — texto sobre oscuro      */
+  --paper-faint:     #EEE9DF8F;  /* Palladian 56% — metadatos sobre oscuro  */
+  --paper-ghost:     #EEE9DF54;  /* Palladian 33% — índice inactivo         */
+
+  /* ---- Familias -------------------------------------------------------
+     DECISIÓN TOMADA: Inter.
+     El brief pedía Helvetica Neue, que en Windows degrada a Arial y en
+     Android a Roboto: la página se veía distinta en cada equipo y en la
+     mayoría de ellos, mal. Inter se carga explícitamente, así que todo el
+     público ve exactamente la misma composición.
+
+     Se sirve como fuente VARIABLE con eje óptico (opsz 14–32):
+       · un archivo de 71 KB en lugar de tres de 47 KB (–70 KB);
+       · font-optical-sizing:auto aplica el corte de texto en el cuerpo de
+         16 px y el corte de titular en la portada de 100 px, sin que haya
+         que declarar nada por elemento.
+
+     Para sustituirla por una licenciada (Neue Haas Grotesk, Söhne) basta
+     cambiar el primer nombre de esta lista y su carga en el HTML: ninguna
+     otra regla del sistema depende del nombre.
+     --------------------------------------------------------------------- */
+  --font-sans: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-copy: "Inter", "Inter Fallback", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-editorial: "Times New Roman", Times, serif;
+
+  /* ---- Escala tipográfica --------------------------------------------- */
+  --fs-display:  clamp(3.25rem, 7.1vw, 6.25rem);   /*  52 → 100 px (brief)  */
+  --fs-section:  clamp(3.00rem, 5.4vw, 4.75rem);   /*  48 →  76 px          */
+  --fs-feature:  clamp(3.00rem, 4.8vw, 4.3125rem); /*  48 →  69 px          */
+  --fs-title:    clamp(1.4375rem, 1.15rem + .55vw, 1.5625rem); /* 23 → 25 px */
+  --fs-numeral:  clamp(1.75rem, 2.6vw, 2.75rem);   /*  28 →  44 px          */
+  --fs-body:     1rem;        /* 16 px — texto general (brief)             */
+  --fs-lede:     1.0625rem;   /* 17 px — bajadas                           */
+  --fs-meta:     0.75rem;     /* 12 px — aclaraciones legales              */
+  --fs-eyebrow:  0.6875rem;   /* 11 px — versales; nunca por debajo        */
+
+  /* ---- Interlineados (brief: 1.65 – 1.8 en texto corrido) ------------- */
+  --lh-display: 0.90;
+  --lh-title:   1.16;
+  --lh-body:    1.75;
+  --lh-dense:   1.65;
+
+  /* ---- Tracking: curva óptica ----------------------------------------- */
+  --track-display: -0.045em;
+  --track-section: -0.04em;
+  --track-title:   -0.018em;
+  --track-eyebrow:  0.26em;   /* versales amplias (brief)                  */
+
+  /* ---- Retícula y ritmo vertical -------------------------------------- */
+  --shell: 1180px;                          /* ancho máximo (brief)        */
+  --gutter: clamp(22px, 5vw, 44px);
+  --spine: 0px;                             /* se activa en escritorio     */
+  --head:  132px;                           /* alto del encabezado         */
+  --head-min: 78px;                         /* alto condensado             */
+  --band:       clamp(104px, 11vw, 184px);
+  --band-tight: clamp(76px,  8vw, 124px);
+
+  /* ---- Movimiento: una sola curva, una sola duración ------------------- */
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --dur:  .8s;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+/* Reserva con métricas igualadas a Inter, SÓLO para texto corrido.
+   Mientras Inter viaja por la red el navegador compone con Arial, que ocupa
+   un 5–6 % menos en párrafos: al llegar la fuente, el texto se reacomoda.
+   El 105,18 % está medido contra Inter y deja esa diferencia en 0,3 %.
+
+   No se aplica a titulares, antetítulos ni botones. En ellos el ancho lo
+   domina el letter-spacing (−0,045 em en display, +0,26 em en versales), que
+   se calcula sobre el cuerpo declarado y no sobre el escalado: con Arial
+   crudo ya quedan dentro del ±2 %, y escalarlos los empeora — medido, el
+   ajuste global llegaba a partir en dos líneas un h2 que sin ajuste no se
+   partía. Cada familia de texto recibe el tratamiento que le corresponde. */
+@font-face{
+  font-family:"Inter Fallback";
+  src:local("Arial");
+  size-adjust:105.18%;
+  ascent-override:92.13%;
+  descent-override:22.91%;
+  line-gap-override:0%;
+}
+
+*, *::before, *::after{ box-sizing:border-box; }
+
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  background:var(--palladian);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:var(--fs-body);
+  line-height:var(--lh-body);
+  font-synthesis-weight:none;
+  font-kerning:normal;
+  font-optical-sizing:auto;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+main{
+  margin-left:var(--spine);   /* la página se despliega a la derecha del lomo */
+  overflow-x:clip;
+}
+
+h1,h2,h3,p{ margin:0; }
+
+/* Sólo el texto corrido usa la reserva con métricas igualadas. Titulares,
+   antetítulos y botones se quedan con la cadena sin escalar: su ancho lo
+   manda el letter-spacing, no el ancho de los glifos. */
+p{ font-family:var(--font-copy); }
+a{ color:inherit; text-decoration:none; -webkit-tap-highlight-color:transparent; }
+img{ display:block; max-width:100%; height:auto; }
+::selection{ background:var(--truffle); color:var(--palladian); }
+
+.page-shell{
+  width:min(var(--shell), 100% - (var(--gutter) * 2));
+  margin-inline:auto;
+}
+.bleed{ width:100%; }
+
+/* ==========================================================================
+   LOMO — índice fijo del documento
+   Superficie Abyssal, texto Palladian, marcador y posición en Burning Flame:
+   el acento mínimo sobre fondo oscuro que pide el manual. Es el elemento que
+   convierte la página en un documento con estructura declarada.
+   Sólo existe en escritorio; en celular la pantalla no lo admite.
+   ========================================================================== */
+
+.spine{ display:none; }
+
+@media (min-width:1080px){
+  :root{ --spine:74px; }
+
+  .spine{
+    position:fixed;
+    inset:0 auto 0 0;
+    z-index:50;
+    width:var(--spine);
+    display:grid;
+    grid-template-rows:var(--head) 1fr auto;
+    align-items:center;
+    justify-items:center;
+    background:var(--abyssal);
+    color:var(--palladian);
+  }
+
+  /* Monograma HW a escala de identificación, nunca de figura decorativa.
+     Es además el regreso a la portada: en un impreso, la marca del lomo
+     devuelve a la cubierta. No hace falta un botón flotante para eso. */
+  .spine-mark{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* El monograma mide 12 px de alto: el relleno lleva el área de clic a
+       44 px, el mínimo razonable para un objetivo señalable. */
+    min-width:44px;
+    min-height:44px;
+    padding:16px 10px;
+    opacity:.82;
+    transition:opacity .3s var(--ease);
+  }
+  .spine-mark:hover{ opacity:1; }
+  .spine-mark:focus-visible{
+    outline:2px solid var(--burning-flame);
+    outline-offset:2px;
+  }
+  .spine-mark img{ width:26px; }
+
+  .spine-index{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:34px;
+  }
+  .spine-index a{
+    display:block;
+    padding:4px 6px;
+    font-size:0.625rem;              /* 10 px */
+    font-weight:700;
+    line-height:1;
+    letter-spacing:0.16em;
+    color:var(--paper-ghost);
+    font-variant-numeric:tabular-nums;
+    transition:color .3s var(--ease);
+  }
+  .spine-index a:hover{ color:var(--paper-soft); }
+  .spine-index a[aria-current="true"]{ color:var(--burning-flame); }
+  .spine-index a:focus-visible{
+    outline:2px solid var(--burning-flame);
+    outline-offset:2px;
+  }
+
+  /* Ubicación girada al pie del lomo: dato institucional permanente. */
+  .spine-foot{
+    writing-mode:vertical-rl;
+    transform:rotate(180deg);
+    padding-bottom:26px;
+    font-size:0.5rem;                /* 8 px, en vertical y muy espaciado */
+    font-weight:700;
+    letter-spacing:0.34em;
+    text-transform:uppercase;
+    color:var(--paper-faint);
+  }
+
+  /* Filamento de posición de lectura sobre el canto derecho del lomo. */
+  .spine-progress{
+    position:absolute;
+    top:0; right:0;
+    width:2px;
+    height:var(--p, 0%);
+    background:var(--burning-flame);
+  }
+}
+
+/* ==========================================================================
+   APARICIONES
+   Sólo opacidad y desplazamiento. Sin escalas, sin rebotes. Se activan con
+   JS presente (.js); sin JS el contenido se muestra directamente.
+   ========================================================================== */
+
+.js [data-reveal]{
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.js [data-reveal].is-in{ opacity:1; transform:none; }
+.js [data-reveal].is-in [data-stagger]{ transition-delay:var(--d, 0ms); }
+
+/* ==========================================================================
+   ACENTO EDITORIAL — Times New Roman Italic
+   Cuatro apariciones autorizadas en todo el sitio:
+   «claridad.» · «Criterio, estructura y medida.» · «y arquitectura»
+   · «tu situación.»
+   ========================================================================== */
+
+.editorial{
+  font-family:var(--font-editorial);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-0.02em;
+}
+h1 > .editorial,
+h2 > .editorial{ display:block; }
+h1 > .editorial{ color:var(--truffle); }
+
+/* ==========================================================================
+   ANTETÍTULOS — versales, peso 700, espaciado amplio
+   ========================================================================== */
+
+.eyebrow{
+  margin:0;
+  font-size:var(--fs-eyebrow);
+  font-weight:700;
+  line-height:1;
+  letter-spacing:var(--track-eyebrow);
+  text-transform:uppercase;
+  color:var(--truffle);
+  font-variant-numeric:tabular-nums;
+}
+
+/* ==========================================================================
+   BOTONES — rectangulares, sin redondeo, Abyssal + acento vertical Flame
+   ========================================================================== */
+
+.action{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:13px;
+  min-height:62px;
+  padding:0 34px;
+  background:var(--abyssal);
+  color:var(--palladian);
+  border:0;
+  border-radius:0;
+  font-size:0.8125rem;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  transition:background .28s var(--ease);
+}
+.action::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:4px;
+  background:var(--burning-flame);
+  transition:width .28s var(--ease);
+}
+.action:hover{ background:var(--blue-fantastic); }
+.action:hover::before{ width:8px; }
+
+.action:focus-visible,
+.brand:focus-visible{
+  outline:3px solid var(--burning-flame);
+  outline-offset:4px;
+}
+.whatsapp-mark{ flex:none; width:19px; height:19px; }
+
+/* ==========================================================================
+   01 — ENCABEZADO
+   Se condensa al iniciar la lectura: 132 → 78 px. La marca deja de ser
+   portada y pasa a ser membrete, sin desaparecer nunca.
+   ========================================================================== */
+
+.masthead-bleed{
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:var(--palladian);
+  border-bottom:1px solid var(--rule);
+}
+
+/* El encabezado pierde 54 px de FLUJO al condensarse, así que todo lo que
+   hay debajo sube. El anclaje de scroll de Chrome compensa ese salto bajando
+   scrollY 54 px — que cruza el umbral hacia abajo, expande el encabezado,
+   devuelve el contenido a su sitio y vuelve a condensar: un ciclo por cuadro,
+   que se percibe como si la página se congelara.
+   Se corta por los dos lados: aquí desactivando el anclaje, y en el script
+   con histéresis (condensa a 140 px, suelta a 60 px), de modo que el salto
+   de 54 px no pueda cruzar nunca los dos umbrales. */
+html{ overflow-anchor:none; }
+
+.masthead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:32px;
+  height:var(--head);
+  transition:height .4s var(--ease);
+}
+.masthead-bleed.is-condensed .masthead{ height:var(--head-min); }
+
+.brand{ display:inline-flex; }
+.brand-lockup{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:11px;
+}
+.brand-lockup img{ width:184px; }
+
+.brand-lockup > span{
+  font-size:0.5625rem;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:0.3em;
+  text-transform:uppercase;
+}
+
+/* CONDENSADO SIN REFLUJO POR CUADRO
+   La versión anterior animaba tres propiedades que recalculan la
+   maquetación en cada cuadro: la altura del encabezado, el ancho del logo y
+   la altura máxima de la firma. Sobre un elemento sticky eso es trabajo de
+   layout sesenta veces por segundo, y se percibe como tirones justo en el
+   punto donde cambia el logo.
+
+   Ahora sólo la altura del encabezado toca la maquetación. El logo se
+   reduce con transform (184 → 132 px equivale a escala 0,717), que resuelve
+   el compositor, y la firma se saca del flujo con posición absoluta para
+   que su desaparición no empuje nada: se va sólo con opacidad. */
+.masthead .brand-lockup{
+  position:relative;
+  display:block;
+}
+.masthead .brand-lockup img{
+  transform-origin:left center;
+  transition:transform .4s var(--ease);
+}
+.masthead-bleed.is-condensed .brand-lockup img{ transform:scale(.717); }
+
+/* La firma secundaria se retira al condensar: el logo ya identifica. */
+.masthead .brand-lockup > span{
+  position:absolute;
+  left:0;
+  top:calc(100% + 11px);
+  white-space:nowrap;
+  opacity:1;
+  transition:opacity .3s var(--ease);
+}
+.masthead-bleed.is-condensed .brand-lockup > span{ opacity:0; }
+
+.location{
+  font-size:0.5625rem;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--ink-faint);
+}
+
+/* ==========================================================================
+   02 — PORTADA
+   Página completa. La columna derecha queda deliberadamente vacía: el vacío
+   sostiene el titular. Las disciplinas se apoyan en el pie de la portada.
+   ========================================================================== */
+
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(220px,0.38fr);
+  min-height:calc(100svh - var(--head));
+  border-bottom:1px solid var(--rule);
+}
+
+.hero-copy{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:var(--band) clamp(40px,5vw,84px) var(--band) 0;
+}
+
+h1{
+  margin:44px 0 0;
+  max-width:13ch;
+  font-size:var(--fs-display);
+  font-weight:400;
+  line-height:var(--lh-display);
+  letter-spacing:var(--track-display);
+  text-wrap:balance;
+}
+
+.hero-text{
+  max-width:50ch;
+  margin:46px 0 52px;
+  color:var(--ink-soft);
+  line-height:1.8;
+  text-wrap:pretty;
+}
+.hero-actions{ display:flex; }
+
+/* Columna de apoyo: filete vertical a altura completa, disciplinas al pie.
+   Puramente tipográfica — sin monograma, planos ni bloques decorativos. */
+.hero-system{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  border-left:1px solid var(--rule);
+  padding:var(--band) 0 var(--band) clamp(28px,3.2vw,52px);
+}
+.hero-disciplines{
+  display:flex;
+  flex-direction:column;
+  font-size:0.6875rem;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:0.26em;
+  text-transform:uppercase;
+  border-top:1px solid var(--rule);
+}
+.hero-disciplines span{
+  padding:26px 0;
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+}
+.hero-disciplines span + span{ border-top:1px solid var(--rule); }
+.hero-disciplines i{
+  font-style:normal;
+  color:var(--truffle);
+  font-size:0.5625rem;
+  letter-spacing:0.18em;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ==========================================================================
+   03 — ÁREAS DE CONSULTA
+   La numeración pasa a escala de titular. Es el único elemento gráfico del
+   sistema y no se añadió nada para conseguirlo: era un dato que ya estaba en
+   la página, dicho en 11 px. Dicho en 44 px, ordena toda la grilla.
+   ========================================================================== */
+
+.services{ padding:var(--band) 0 calc(var(--band) + 16px); }
+
+.section-heading{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:start;
+  gap:0 clamp(28px,3vw,52px);
+  padding-top:34px;
+  margin-bottom:var(--band-tight);
+  border-top:1px solid var(--ink);   /* filete de apertura, peso pleno */
+}
+.section-heading .eyebrow{ margin-bottom:30px; }
+
+h2{
+  max-width:17ch;
+  font-size:var(--fs-section);
+  font-weight:400;
+  line-height:0.96;
+  letter-spacing:var(--track-section);
+  text-wrap:balance;
+}
+
+.section-note{
+  align-self:end;
+  padding-left:26px;
+  border-left:2px solid var(--truffle);
+  color:var(--ink-soft);
+  font-size:1.125rem;
+  line-height:1.45;
+  max-width:16ch;
+}
+
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  border-top:1px solid var(--rule);
+}
+
+.service-card{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:clamp(28px,3vw,44px);
+  min-height:286px;
+  padding:56px 0 60px;
+  border-bottom:1px solid var(--rule);
+}
+.service-card:nth-child(odd){
+  border-right:1px solid var(--rule);
+  padding-right:clamp(40px, 5vw, 72px);
+}
+.service-card:nth-child(even){ padding-left:clamp(40px, 5vw, 72px); }
+
+/* El filete superior se pinta a peso pleno al pasar el cursor: la ficha se
+   señala dentro de la retícula, sin sombras ni desplazamientos. */
+.service-card::after{
+  content:"";
+  position:absolute;
+  top:-1px; left:0;
+  width:0; height:1px;
+  background:var(--truffle);
+  transition:width .55s var(--ease);
+}
+.service-card:hover::after{ width:100%; }
+
+.service-number{
+  font-size:var(--fs-numeral);
+  font-weight:700;
+  line-height:0.78;              /* alinea ópticamente con la altura de x */
+  letter-spacing:-0.03em;
+  color:var(--truffle);
+  font-variant-numeric:tabular-nums;
+  transition:color .3s var(--ease);
+}
+.service-card:hover .service-number{ color:var(--abyssal); }
+
+.service-card h3{
+  margin-bottom:22px;
+  max-width:22ch;
+  font-size:var(--fs-title);
+  font-weight:500;
+  line-height:var(--lh-title);
+  letter-spacing:var(--track-title);
+  text-wrap:balance;
+}
+.service-card p{
+  max-width:46ch;
+  color:var(--ink-soft);
+  line-height:var(--lh-dense);
+  text-wrap:pretty;
+}
+
+/* ==========================================================================
+   04 — ÁREA ESPECIALIZADA · Derecho sanitario y arquitectura
+   Quiebre de capítulo a sangre. El título permanece fijo mientras las dos
+   líneas de servicio pasan por delante: el lector nunca pierde de vista en
+   qué capítulo está.
+
+   Fondo Abyssal · textos Palladian · acento y numeración Burning Flame ·
+   plano secundario Blue Fantastic.
+   ========================================================================== */
+
+.health-band{
+  position:relative;
+  background:var(--abyssal);
+  color:var(--palladian);
+  margin-bottom:var(--band);
+}
+/* Acento lateral como barra posicionada: un border-left descontaría ancho a
+   la banda y descentraría su retícula interior respecto del resto. */
+.health-band::before{
+  content:"";
+  position:absolute;
+  inset:0 auto 0 0;
+  width:5px;
+  background:var(--burning-flame);
+}
+
+.health-practice{
+  display:grid;
+  grid-template-columns:minmax(0,0.82fr) minmax(0,1.18fr);
+  gap:clamp(48px, 6vw, 100px);
+  padding:clamp(88px, 9vw, 152px) 0;
+  align-items:start;
+}
+
+.health-heading{
+  position:sticky;
+  top:calc(var(--head-min) + 56px);
+}
+.health-heading .eyebrow{ color:var(--burning-flame); margin-bottom:32px; }
+.health-heading h2{
+  margin-bottom:36px;
+  max-width:11ch;
+  font-size:var(--fs-feature);
+  line-height:0.93;
+  letter-spacing:-0.04em;
+}
+.health-heading h2 > .editorial{ color:var(--palladian); margin-top:10px; }
+.health-intro{
+  max-width:36ch;
+  color:var(--paper-soft);
+  font-size:var(--fs-lede);
+  line-height:1.8;
+  text-wrap:pretty;
+}
+
+/* Plano secundario Blue Fantastic: panel que ordena las líneas de servicio.
+   Bloque geométrico admitido porque organiza información. */
+.health-services{
+  padding:clamp(32px, 3vw, 52px) clamp(32px, 3vw, 54px);
+  background:var(--blue-fantastic);
+}
+.health-services article{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:clamp(24px,2.4vw,36px);
+  padding:40px 0 44px;
+}
+.health-services article:first-child{ padding-top:8px; }
+.health-services article + article{ border-top:1px solid var(--rule-dark); }
+.health-services article:last-child{ padding-bottom:10px; }
+
+.health-services article > span{
+  font-size:var(--fs-numeral);
+  font-weight:700;
+  line-height:0.78;
+  letter-spacing:-0.03em;
+  color:var(--burning-flame);
+  font-variant-numeric:tabular-nums;
+}
+.health-services h3{
+  margin-bottom:18px;
+  max-width:30ch;
+  font-size:1.375rem;
+  font-weight:500;
+  line-height:1.22;
+  letter-spacing:var(--track-title);
+  text-wrap:balance;
+}
+.health-services p{
+  max-width:52ch;
+  color:var(--paper-soft);
+  font-size:0.9375rem;
+  line-height:var(--lh-dense);
+  text-wrap:pretty;
+}
+.health-services p + p{ margin-top:16px; }
+
+/* ==========================================================================
+   05 — PRIMERA CONVERSACIÓN
+   ========================================================================== */
+
+.contact-wrap{ background:var(--oatmeal); }
+
+.contact{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(300px,0.8fr);
+  align-items:start;
+  gap:0 clamp(40px, 4.4vw, 76px);
+  padding:var(--band) 0;
+}
+/* Sin filete de apertura: el cambio de Palladian a Oatmeal ya construye el
+   límite de sección. Sumar una línea repetiría el mismo dato. */
+.contact .eyebrow{ margin-bottom:30px; }
+.contact h2{ font-size:var(--fs-feature); max-width:13ch; }
+.contact h2 > .editorial{ color:var(--truffle); margin-top:6px; }
+
+.contact-action{
+  padding-left:clamp(32px, 4vw, 56px);
+  border-left:1px solid var(--rule);
+}
+.contact-action p{
+  max-width:42ch;
+  margin-bottom:42px;
+  color:var(--ink-soft);
+  line-height:1.75;
+  text-wrap:pretty;
+}
+
+/* ==========================================================================
+   06 — PIE DE PÁGINA
+   ========================================================================== */
+
+footer{ background:var(--abyssal); color:var(--palladian); }
+
+.footer-inner{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:clamp(40px, 6vw, 88px);
+  min-height:224px;
+  padding:60px 0;
+}
+footer .brand-lockup img{ width:152px; }
+footer .brand-lockup > span{ color:var(--paper-faint); }
+footer p{
+  max-width:54ch;
+  color:var(--paper-faint);
+  font-size:var(--fs-meta);
+  line-height:var(--lh-dense);
+}
+/* Colofón: año y regreso a la portada. En celular no hay lomo y el
+   encabezado se va con el scroll, así que éste es el único punto de retorno
+   —y es el que corresponde: se ofrece al final del documento, que es cuando
+   hace falta, en lugar de un botón flotante compitiendo con la consulta. */
+.footer-end{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:16px;
+}
+.footer-year{
+  font-size:var(--fs-eyebrow);
+  font-weight:700;
+  letter-spacing:0.16em;
+  font-variant-numeric:tabular-nums;
+}
+.to-top{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:9px;
+  /* Es un control, no un metadato: objetivo táctil de 44 px y Palladian al
+     78 % en lugar del 56 % de los textos pasivos del pie (4,6:1 se quedaba
+     al filo del mínimo para algo que se pulsa). */
+  min-height:44px;
+  padding:4px 0;
+  font-size:var(--fs-eyebrow);
+  font-weight:700;
+  line-height:1;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--paper-soft);
+  transition:color .3s var(--ease);
+}
+.to-top:hover{ color:var(--burning-flame); }
+.to-top:focus-visible{
+  outline:2px solid var(--burning-flame);
+  outline-offset:4px;
+}
+.to-top span{ font-size:1.1em; line-height:1; }
+
+/* La firma del pie también devuelve a la portada. */
+.footer-inner .brand{ display:inline-flex; }
+
+/* ==========================================================================
+   BOTÓN FIJO EN CELULAR
+   Aparece sólo cuando ningún botón de consulta está a la vista, para no
+   ofrecer la misma acción dos veces en la misma pantalla.
+   ========================================================================== */
+
+.mobile-whatsapp{ display:none; }
+
+@media (max-width:760px){
+  .mobile-whatsapp{
+    position:fixed;
+    z-index:40;
+    left:var(--gutter);
+    right:var(--gutter);
+    bottom:calc(14px + env(safe-area-inset-bottom, 0px));
+    display:flex;
+    justify-content:center;
+    width:auto;
+    min-height:58px;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(14px);
+    transition:opacity .4s var(--ease), transform .4s var(--ease), visibility .4s;
+  }
+  .mobile-whatsapp.is-visible{ opacity:1; visibility:visible; transform:none; }
+}
+
+/* ==========================================================================
+   RESPONSIVE — punto de quiebre principal 760 px
+   ========================================================================== */
+
+@media (max-width:1079px){
+  /* Sin lomo: no hay canto disponible. El título sanitario deja de fijarse. */
+  .health-heading{ position:static; }
+}
+
+@media (max-width:760px){
+  :root{ --gutter:17px; --head:96px; --head-min:72px; }
+
+  .page-shell{ width:min(100% - (var(--gutter) * 2), 640px); }
+
+  .masthead-bleed{ position:static; }
+  .masthead{ gap:20px; }
+  .brand-lockup{ gap:8px; }
+  .brand-lockup img{ width:138px; }
+  .brand-lockup > span{ font-size:0.5rem; letter-spacing:0.24em; }
+  .location{ font-size:0.5rem; line-height:1.6; text-align:right; max-width:11ch; }
+
+  /* Portada, bloque sanitario y contacto pasan a una columna. */
+  .hero{ display:block; min-height:0; }
+  .hero-copy{ padding:var(--band-tight) 0 calc(var(--band-tight) - 10px); }
+  h1{ margin-top:32px; max-width:none; line-height:0.94; }
+  .hero-text{ margin:34px 0 42px; line-height:1.72; }
+  .action{ width:100%; justify-content:center; }
+  .hero-actions{ display:block; }
+  .hero-system{ border-left:0; padding:0; margin-bottom:var(--band-tight); }
+  .hero-disciplines span{ padding:21px 0; }
+
+  .services{ padding:var(--band-tight) 0; }
+  .section-heading{ display:block; padding-top:26px; margin-bottom:52px; }
+  .section-heading .eyebrow{ margin-bottom:22px; }
+  h2{ max-width:none; font-size:3rem; }
+  .section-note{ display:none; }
+
+  /* Grilla de servicios a una sola columna. */
+  .service-grid{ display:block; }
+  .service-card,
+  .service-card:nth-child(odd),
+  .service-card:nth-child(even){
+    gap:20px;
+    min-height:0;
+    padding:38px 0 42px;
+    border-right:0;
+  }
+  .service-card::after{ display:none; }
+  .service-card h3,
+  .service-card p{ max-width:none; }
+
+  .health-band{ margin-bottom:var(--band-tight); }
+  .health-band::before{ width:4px; }
+  .health-practice{ display:block; padding:var(--band-tight) 0; }
+  .health-heading{ margin-bottom:46px; }
+  .health-heading h2{ font-size:3.125rem; max-width:none; }
+  .health-intro{ max-width:none; font-size:1rem; }
+  .health-services{ padding:14px 22px 18px; }
+  .health-services article{ gap:18px; }
+  .health-services h3,
+  .health-services p{ max-width:none; }
+
+  .contact{ display:block; padding:var(--band-tight) 0; }
+  .contact h2{ margin-top:0; font-size:3rem; max-width:none; }
+  .contact-action{
+    margin-top:50px;
+    padding:40px 0 0;
+    border-left:0;
+    border-top:1px solid var(--rule);
+  }
+  .contact-action p{ max-width:none; }
+
+  .footer-inner{
+    grid-template-columns:1fr auto;
+    gap:28px;
+    min-height:0;
+    padding:50px 0 108px;
+  }
+  footer p{ grid-column:1 / -1; grid-row:2; max-width:40ch; }
+  footer .brand-lockup img{ width:132px; }
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD DEL MOVIMIENTO
+   ========================================================================== */
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  *, *::before, *::after{ transition:none !important; animation:none !important; }
+  .js [data-reveal]{ opacity:1; transform:none; }
+}
