@@ -492,8 +492,9 @@ h1{
    VELOCIDAD
    La primera versión recorría 214 px en 22 s: 9,7 px/s, por debajo del
    umbral en que el ojo detecta movimiento sin fijar la vista. Se veía
-   quieta. Con 32 % de recorrido y 13 s de ida son unos 29 px/s: deriva
-   perceptible sin llegar a carrusel.
+   quieta. El margen es estrecho: por encima de ~45 px/s se lee como
+   carrusel y por debajo de ~16 px/s desaparece. El ciclo de 34 s deja el
+   escritorio en unos 25 px/s, dentro de esa franja.
 
    VELO
    Degradado Abyssal, no el (10,15,18) del ejemplo: ese gris verdoso no está
@@ -503,7 +504,7 @@ h1{
 .panoramica{
   position:relative;
   overflow:hidden;
-  height:clamp(210px, 23vw, 360px);
+  height:clamp(240px, 27vw, 420px);
   background:var(--abyssal);   /* el hueco previo a la carga ya es del sistema */
   margin-bottom:var(--nexo);
 }
@@ -521,7 +522,7 @@ h1{
   height:100%;
   object-fit:cover;
   object-position:center 46%;
-  animation:barrido var(--ritmo, 26s) ease-in-out infinite;
+  animation:barrido var(--ritmo, 34s) ease-in-out infinite;
   animation-play-state:paused;      /* sólo corre cuando está a la vista */
 }
 .panoramica.is-mirando .panoramica-lente img{ animation-play-state:running; }
@@ -546,9 +547,23 @@ h1{
 
 @media (max-width:760px){
   .panoramica{
-    height:clamp(190px, 46vw, 280px);
+    height:clamp(215px, 52vw, 320px);
     margin-bottom:var(--nexo);
   }
+}
+
+/* RITMO POR TRAMOS
+   El recorrido es un porcentaje del ancho, pero la duración es fija: cuanto
+   más angosta la ventana, más lento el barrido. Con un solo ritmo, a 761 px
+   caía a 14 px/s y desaparecía; con el de celular, a 760 px se disparaba a
+   47 px/s y parecía un carrusel. Tres tramos lo mantienen entre 19 y 35 px/s
+   en todo el rango. Van al final y en orden: el bloque de celular es
+   posterior en el archivo y, si definiera el ritmo, pisaría a los otros. */
+@media (max-width:520px){
+  .panoramica-lente img{ --ritmo:16s; }
+}
+@media (min-width:521px) and (max-width:1179px){
+  .panoramica-lente img{ --ritmo:24s; }
 }
 
 /* Sin movimiento: la panorámica queda quieta y centrada. */
@@ -559,7 +574,7 @@ h1{
 @media (max-width:760px){
   /* 150 % de zoom y ciclo más corto: a 390 px de ancho el recorrido pasa de
      9 a ~22 px/s, que ya se percibe. */
-  .panoramica-lente img{ --zoom:150%; --viaje:-33.333%; --ritmo:18s; }
+  .panoramica-lente img{ --zoom:150%; --viaje:-33.333%; }
 }
 
 /* ==========================================================================
@@ -574,10 +589,11 @@ h1{
    imagen dejaba de leerse como bisagra. */
 .services{ padding:0 0 calc(var(--band) + 16px); }
 
+/* Sin filete de apertura ni aire propio arriba: el corte lo hace el canto
+   de la panorámica, que está 65 px más arriba. Un filete ahí abajo repetía
+   el mismo gesto dos veces. */
 .section-heading{
-  padding-top:34px;
   margin-bottom:var(--band-tight);
-  border-top:1px solid var(--ink);   /* filete de apertura, peso pleno */
 }
 .section-heading .eyebrow{ margin-bottom:30px; }
 
