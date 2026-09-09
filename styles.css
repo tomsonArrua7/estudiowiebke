@@ -90,6 +90,10 @@
   --head-min: 78px;                         /* alto condensado             */
   --band:       clamp(104px, 11vw, 184px);
   --band-tight: clamp(76px,  8vw, 124px);
+  /* Aire corto: el que separa la portada de la panorámica y a ésta del
+     título de áreas. La imagen es la bisagra entre ambos, no un bloque
+     suelto entre dos vacíos grandes. */
+  --nexo:       clamp(44px,  4.5vw, 76px);
 
   /* ---- Movimiento: una sola curva, una sola duración ------------------- */
   --ease: cubic-bezier(.22,.61,.36,1);
@@ -444,9 +448,8 @@ html{ overflow-anchor:none; }
   display:flex;
   flex-direction:column;
   justify-content:center;
-  min-height:calc(100svh - var(--head));
-  padding:var(--band) 0;
-  border-bottom:1px solid var(--rule);
+  min-height:calc(78svh - var(--head));
+  padding:var(--band) 0 var(--nexo);
 }
 
 h1{
@@ -480,11 +483,17 @@ h1{
 
    GEOMETRÍA DEL BARRIDO
    La imagen mide 2,5:1, más angosta que la banda, así que para que haya algo
-   por donde barrer hay que ampliarla: se le da 118 % del ancho del contenedor
-   y se la desplaza el 18 % sobrante. Como el desplazamiento se expresa en
-   porcentaje del propio elemento, ese 18 % del contenedor equivale a
-   18/118 = 15,254 % de la imagen. Con ese número el recorrido termina justo
+   por donde barrer hay que ampliarla: se le da 132 % del ancho del contenedor
+   y se la desplaza el 32 % sobrante. Como el desplazamiento se expresa en
+   porcentaje del propio elemento, ese 32 % del contenedor equivale a
+   32/132 = 24,242 % de la imagen. Con ese número el recorrido termina justo
    al ras del borde derecho, sin descubrir fondo.
+
+   VELOCIDAD
+   La primera versión recorría 214 px en 22 s: 9,7 px/s, por debajo del
+   umbral en que el ojo detecta movimiento sin fijar la vista. Se veía
+   quieta. Con 32 % de recorrido y 13 s de ida son unos 29 px/s: deriva
+   perceptible sin llegar a carrusel.
 
    VELO
    Degradado Abyssal, no el (10,15,18) del ejemplo: ese gris verdoso no está
@@ -494,9 +503,9 @@ h1{
 .panoramica{
   position:relative;
   overflow:hidden;
-  height:clamp(300px, 40vw, 620px);
+  height:clamp(210px, 23vw, 360px);
   background:var(--abyssal);   /* el hueco previo a la carga ya es del sistema */
-  margin-bottom:var(--band);
+  margin-bottom:var(--nexo);
 }
 
 .panoramica-lente{ position:absolute; inset:0; }
@@ -505,18 +514,21 @@ h1{
   /* La regla global img{max-width:100%} anularía el 118 % y dejaría la
      imagen al ras del contenedor: sin sobrante, no hay barrido posible. */
   max-width:none;
-  width:118%;
+  /* Parametrizado: en celular el contenedor es angosto y un 32 % de
+     recorrido son apenas 120 px, otra vez por debajo del umbral visible.
+     Allí se amplía el zoom y se acorta el ciclo. */
+  width:var(--zoom, 132%);
   height:100%;
   object-fit:cover;
   object-position:center 46%;
-  animation:barrido 44s ease-in-out infinite;
+  animation:barrido var(--ritmo, 26s) ease-in-out infinite;
   animation-play-state:paused;      /* sólo corre cuando está a la vista */
 }
 .panoramica.is-mirando .panoramica-lente img{ animation-play-state:running; }
 
 @keyframes barrido{
   0%, 100%{ transform:translateX(0); }
-  50%     { transform:translateX(-15.254%); }
+  50%     { transform:translateX(var(--viaje, -24.242%)); }   /* 32/132 */
 }
 
 /* Velo Abyssal. Va sobre la imagen y NO se mueve con ella: se lee como una
@@ -534,14 +546,20 @@ h1{
 
 @media (max-width:760px){
   .panoramica{
-    height:clamp(280px, 62vw, 420px);
-    margin-bottom:var(--band-tight);
+    height:clamp(190px, 46vw, 280px);
+    margin-bottom:var(--nexo);
   }
 }
 
 /* Sin movimiento: la panorámica queda quieta y centrada. */
 @media (prefers-reduced-motion:reduce){
-  .panoramica-lente img{ animation:none; transform:translateX(-7.6%); }
+  .panoramica-lente img{ animation:none; transform:translateX(-12.1%); }
+}
+
+@media (max-width:760px){
+  /* 150 % de zoom y ciclo más corto: a 390 px de ancho el recorrido pasa de
+     9 a ~22 px/s, que ya se percibe. */
+  .panoramica-lente img{ --zoom:150%; --viaje:-33.333%; --ritmo:18s; }
 }
 
 /* ==========================================================================
@@ -551,7 +569,10 @@ h1{
    la página, dicho en 11 px. Dicho en 44 px, ordena toda la grilla.
    ========================================================================== */
 
-.services{ padding:var(--band) 0 calc(var(--band) + 16px); }
+/* Sin aire propio arriba: el hueco lo aporta el margen de la panorámica.
+   Sumar los dos dejaba el vacío de abajo al doble que el de arriba y la
+   imagen dejaba de leerse como bisagra. */
+.services{ padding:0 0 calc(var(--band) + 16px); }
 
 .section-heading{
   padding-top:34px;
@@ -873,13 +894,13 @@ footer p{
   .location{ font-size:0.5rem; line-height:1.6; text-align:right; max-width:11ch; }
 
   /* Portada, bloque sanitario y contacto pasan a una columna. */
-  .hero{ min-height:0; padding:var(--band-tight) 0; }
+  .hero{ min-height:0; padding:var(--band-tight) 0 var(--nexo); }
   h1{ max-width:none; line-height:0.94; }
   .hero-text{ max-width:none; margin:36px 0 42px; line-height:1.72; }
   .action{ width:100%; justify-content:center; }
   .hero-actions{ display:block; }
 
-  .services{ padding:var(--band-tight) 0; }
+  .services{ padding:0 0 var(--band-tight); }
   .section-heading{ display:block; padding-top:26px; margin-bottom:52px; }
   .section-heading .eyebrow{ margin-bottom:22px; }
   h2{ max-width:none; font-size:3rem; }
