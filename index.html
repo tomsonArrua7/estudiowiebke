@@ -105,6 +105,24 @@
 
   </section>
 
+  <!-- PANORÁMICA — La Plata desde la catedral
+       Entra a color: la luz de la toma ya cae dentro del sistema (el
+       poniente ronda el Burning Flame, el cielo tira al Abyssal). Lo que la
+       integra es el velo Abyssal en degradado, que además refuerza la
+       dirección de luz que la foto ya trae. -->
+  <section class="panoramica bleed" aria-label="La Plata al atardecer, vista desde la catedral">
+    <div class="panoramica-lente">
+      <picture>
+        <source type="image/webp" media="(max-width:760px)" srcset="fotos/panoramica-movil.webp">
+        <source type="image/jpeg" media="(max-width:760px)" srcset="fotos/panoramica-movil.jpg">
+        <source type="image/webp" srcset="fotos/panoramica.webp">
+        <img src="fotos/panoramica.jpg"
+             alt="La Plata al atardecer vista desde la catedral: la ciudad hacia el horizonte y las agujas recortadas contra el poniente."
+             width="1983" height="793" loading="lazy" decoding="async">
+      </picture>
+    </div>
+  </section>
+
   <!-- 03 — ÁREAS DE CONSULTA -->
   <section class="services page-shell" id="areas" aria-labelledby="services-title">
     <div class="section-heading" data-reveal>
@@ -270,6 +288,21 @@
     fija.classList.add('is-visible');
   }
 
+
+
+  /* --- La panorámica sólo se anima mientras está a la vista. Es la única
+         animación perpetua del sitio, y dejarla girando fuera de pantalla
+         gastaría batería sin que nadie la vea. ---------------------- */
+  var pano = document.querySelector('.panoramica');
+  if (pano && soporta) {
+    new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        pano.classList.toggle('is-mirando', e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(pano);
+  } else if (pano) {
+    pano.classList.add('is-mirando');
+  }
 
   /* --- Regreso a la portada -------------------------------------------
      El href="#inicio" queda como respaldo sin JS, pero se intercepta: si el

@@ -469,6 +469,82 @@ h1{
 .hero-actions{ display:flex; }
 
 /* ==========================================================================
+   PANORÁMICA — La Plata desde la catedral
+
+   MOVIMIENTO: transform, no background-position.
+   La animación equivalente sobre background-position obliga al navegador a
+   repintar la banda entera en cada cuadro, porque la posición del fondo no
+   la resuelve el compositor. Un transform sobre la imagen da exactamente el
+   mismo barrido pero lo resuelve la GPU: sin repintado, sin castigo en
+   celulares. Es el mismo efecto por una fracción del costo.
+
+   GEOMETRÍA DEL BARRIDO
+   La imagen mide 2,5:1, más angosta que la banda, así que para que haya algo
+   por donde barrer hay que ampliarla: se le da 118 % del ancho del contenedor
+   y se la desplaza el 18 % sobrante. Como el desplazamiento se expresa en
+   porcentaje del propio elemento, ese 18 % del contenedor equivale a
+   18/118 = 15,254 % de la imagen. Con ese número el recorrido termina justo
+   al ras del borde derecho, sin descubrir fondo.
+
+   VELO
+   Degradado Abyssal, no el (10,15,18) del ejemplo: ese gris verdoso no está
+   en la paleta cerrada del manual y desafinaría con el resto del sitio.
+   ========================================================================== */
+
+.panoramica{
+  position:relative;
+  overflow:hidden;
+  height:clamp(300px, 40vw, 620px);
+  background:var(--abyssal);   /* el hueco previo a la carga ya es del sistema */
+  margin-bottom:var(--band);
+}
+
+.panoramica-lente{ position:absolute; inset:0; }
+
+.panoramica-lente img{
+  /* La regla global img{max-width:100%} anularía el 118 % y dejaría la
+     imagen al ras del contenedor: sin sobrante, no hay barrido posible. */
+  max-width:none;
+  width:118%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 46%;
+  animation:barrido 44s ease-in-out infinite;
+  animation-play-state:paused;      /* sólo corre cuando está a la vista */
+}
+.panoramica.is-mirando .panoramica-lente img{ animation-play-state:running; }
+
+@keyframes barrido{
+  0%, 100%{ transform:translateX(0); }
+  50%     { transform:translateX(-15.254%); }
+}
+
+/* Velo Abyssal. Va sobre la imagen y NO se mueve con ella: se lee como una
+   condición de luz del lugar, no como una mancha pegada a la foto. */
+.panoramica::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(90deg,
+    rgba(27, 38, 50, 0.92)  0%,
+    rgba(27, 38, 50, 0.62) 45%,
+    rgba(27, 38, 50, 0.22) 100%);
+}
+
+@media (max-width:760px){
+  .panoramica{
+    height:clamp(280px, 62vw, 420px);
+    margin-bottom:var(--band-tight);
+  }
+}
+
+/* Sin movimiento: la panorámica queda quieta y centrada. */
+@media (prefers-reduced-motion:reduce){
+  .panoramica-lente img{ animation:none; transform:translateX(-7.6%); }
+}
+
+/* ==========================================================================
    03 — ÁREAS DE CONSULTA
    La numeración pasa a escala de titular. Es el único elemento gráfico del
    sistema y no se añadió nada para conseguirlo: era un dato que ya estaba en

@@ -94,6 +94,15 @@ python tools/generar-imagenes.py
 | `favicon-32.png`        | 32×32     | Pestaña del navegador                |
 | `apple-touch-icon.png`  | 180×180   | Pantalla de inicio en iOS            |
 
+**Panorámica.** `fotos/panoramica-*.{webp,jpg}` salen de
+`tools/generar-panoramica.py`. El barrido se hace con `transform`, no con
+`background-position`: éste último obliga a repintar la banda entera en cada
+cuadro, mientras que el primero lo resuelve la GPU. La imagen se lleva al
+118 % del ancho para que exista sobrante por donde barrer, y el recorrido de
+15,254 % (= 18/118) termina justo al ras del borde derecho. La animación se
+pausa cuando la banda no está a la vista y se desactiva con
+`prefers-reduced-motion`.
+
 El monograma HW es apaisado y de trazo fino: por debajo de 24 px pierde
 definición. Es una limitación de la marca, no del archivo.
 

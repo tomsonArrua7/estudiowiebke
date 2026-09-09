@@ -69,6 +69,25 @@ export default function SiteMotion() {
     }
 
 
+
+    /* --- La panorámica sólo se anima mientras está a la vista: es la única
+       animación perpetua del sitio. ------------------------------------ */
+    const pano = document.querySelector(".panoramica");
+    let obsPano;
+    if (pano && soporta) {
+      obsPano = new IntersectionObserver(
+        (entradas) => {
+          entradas.forEach((e) =>
+            pano.classList.toggle("is-mirando", e.isIntersecting)
+          );
+        },
+        { threshold: 0 }
+      );
+      obsPano.observe(pano);
+    } else if (pano) {
+      pano.classList.add("is-mirando");
+    }
+
     /* --- Regreso a la portada -------------------------------------------
        El href="#inicio" queda como respaldo sin JS, pero se intercepta: si el
        fragmento ya es #inicio, el navegador considera que no hay nada que
@@ -144,6 +163,7 @@ export default function SiteMotion() {
     return () => {
       if (obsReveal) obsReveal.disconnect();
       if (obsCta) obsCta.disconnect();
+      if (obsPano) obsPano.disconnect();
       retornos.forEach((a) => a.removeEventListener("click", alVolver));
       window.removeEventListener("scroll", alDesplazar);
       window.removeEventListener("resize", alDesplazar);

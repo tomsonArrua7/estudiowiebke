@@ -12,8 +12,10 @@ node_modules/
 # Inter TTF: lo descarga tools/generar-imagenes.py si falta. No se versiona.
 tools/InterVar.ttf
 
-# Foto original del cliente: material de trabajo, no se publica.
-fotos/
+# Los originales del cliente son material de trabajo y pesan de más.
+# Lo que se publica son los derivados que genera tools/.
+fotos/catedral-original.jpeg
+fotos/panoramica-original.png
 
 # Caché de Python
 __pycache__/
