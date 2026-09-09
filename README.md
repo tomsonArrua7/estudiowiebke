@@ -50,6 +50,25 @@ git clone https://github.com/tomsonArrua7/estudiowiebke.git .
 
 Para actualizar: `git pull`. No hay que reconstruir nada.
 
+### Caché: sellar antes de commitear
+
+CloudPanel sirve los estáticos con `Cache-Control: max-age=315360000` —diez
+años— y Cloudflare los guarda en el borde. `index.html` no se cachea
+(`cf-cache-status: DYNAMIC`), pero `styles.css` sí, así que tras un
+despliegue la página puede quedar con **marcado nuevo y estilos viejos**.
+Pasó el 9/9/2026.
+
+Por eso cada referencia local lleva `?v=<huella del contenido>`. Después de
+tocar CSS o imágenes, y **antes de commitear**:
+
+```bash
+python tools/sellar-cache.py
+```
+
+Si el archivo cambió, cambia su URL y el caché se renueva solo. Si no
+cambió, la URL es idéntica y los diez años juegan a favor. Sólo hay que
+purgar Cloudflare a mano si alguna vez se olvida este paso.
+
 ---
 
 ## Dominio
