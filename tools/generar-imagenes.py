@@ -88,16 +88,29 @@ def construir_og():
     marca = logo("WIEBKE-logo-principal-claro.png", 292)
     lienzo.paste(marca, (MARGEN, 84), marca)
 
-    # Titular. Mismo quiebre de línea que la portada: la cursiva baja sola.
-    f_display = inter(68, peso=400, opsz=32)
-    f_italic = ImageFont.truetype(TIMES_ITALIC, 74)
-    tracking_display = -68 * 0.045          # −0,045 em, como en el sitio
+    # Titular. Mismo quiebre que la portada del sitio: dos líneas en sans y
+    # la cursiva sola en la tercera. El brief v2 lo alargó de 24 a 40
+    # caracteres, que a 68 px ya no entraban en una línea.
+    CUERPO = 58
+    f_display = inter(CUERPO, peso=400, opsz=32)
+    f_italic = ImageFont.truetype(TIMES_ITALIC, 64)
+    tracking_display = -CUERPO * 0.045      # −0,045 em, como en el sitio
+    ancho_util = W - MARGEN * 2
 
-    y = 262            # el aire mayor va tras la marca, no antes del filete
-    texto_trackeado(d, (MARGEN, y), "Decisiones que requieren",
-                    f_display, PALLADIAN, tracking_display)
-    y += 86
-    d.text((MARGEN, y), "claridad.", font=f_italic, fill=BURNING_FLAME)
+    lineas = ["Arquitectura y defensa", "jurídica para tus"]
+    for linea in lineas:
+        ancho = ancho_trackeado(linea, f_display, tracking_display)
+        if ancho > ancho_util:
+            raise SystemExit(
+                f"La línea «{linea}» mide {ancho:.0f} px y no entra en "
+                f"{ancho_util} px. Bajar CUERPO o repartir distinto.")
+
+    y = 232
+    for linea in lineas:
+        texto_trackeado(d, (MARGEN, y), linea, f_display, PALLADIAN,
+                        tracking_display)
+        y += 62
+    d.text((MARGEN, y - 2), "proyectos.", font=f_italic, fill=BURNING_FLAME)
 
     # Filete de cierre: Palladian al 24 %, el valor que fija el manual.
     d.rectangle([MARGEN, 522, W - MARGEN, 522], fill=palladian(0.24))

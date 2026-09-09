@@ -16,8 +16,17 @@ cambia la URL, y tanto Cloudflare como el navegador la tratan como un
 recurso nuevo. Si no cambia, la URL es idéntica y el caché de diez años
 juega a favor.
 
-No toca favicons ni og.png: esos los referencian servicios externos por
-URL absoluta y conviene que sean estables.
+Alcanza también a og:image y twitter:image, que van como URL absoluta en
+las etiquetas meta. Es imprescindible: al cambiar el titular, og.png se
+regeneró con el mismo nombre, y sin sellar los scrapers habrían seguido
+recibiendo el banner viejo desde el borde de Cloudflare.
+
+Los favicons quedan fuera: los navegadores los piden por su cuenta y un
+parámetro cambiante los haría redescargar sin motivo.
+
+OJO: sellar la URL resuelve el caché de Cloudflare, no el de las redes.
+Facebook, WhatsApp y LinkedIn guardan su propia copia del banner y hay que
+refrescarla desde sus depuradores. Ver el README.
 
 Ejecutar SIEMPRE antes de commitear cambios en CSS o imágenes:
 
@@ -32,8 +41,12 @@ import sys
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML = os.path.join(RAIZ, "index.html")
 
-# Rutas que se sellan. Se excluyen a propósito los iconos y og.png.
+# Rutas relativas que se sellan en href / src / srcset.
 SELLABLES = re.compile(r'(?:styles\.css|fotos/[\w.-]+|logos/[\w.-]+)')
+
+# Etiquetas meta cuyo content es una URL absoluta que también se sella.
+SITIO = "https://estudiowiebke.com.ar"
+META_SELLABLES = ("og:image", "twitter:image")
 
 
 def huella(ruta_rel):
@@ -47,8 +60,7 @@ def huella(ruta_rel):
 def sellar(texto):
     cambios = []
 
-    def reemplazo(m):
-        # Atributo completo: href="…" | src="…" | srcset="…"
+    def sellar_relativa(m):
         attr, comilla, valor = m.group(1), m.group(2), m.group(3)
         limpio = valor.split("?")[0]
         if not SELLABLES.fullmatch(limpio):
@@ -62,7 +74,28 @@ def sellar(texto):
             cambios.append((limpio, h))
         return f'{attr}={comilla}{nuevo}{comilla}'
 
-    texto = re.sub(r'\b(href|src|srcset)=(["\'])([^"\']+)\2', reemplazo, texto)
+    texto = re.sub(r'\b(href|src|srcset)=(["\'])([^"\']+)\2',
+                   sellar_relativa, texto)
+
+    def sellar_meta(m):
+        etiqueta, valor = m.group(0), m.group(1)
+        rel = valor.split("?")[0]
+        if rel.startswith(SITIO + "/"):
+            rel = rel[len(SITIO) + 1:]
+        h = huella(rel)
+        if not h:
+            print(f"  AVISO: no existe {rel}", file=sys.stderr)
+            return etiqueta
+        nuevo = f"{SITIO}/{rel}?v={h}"
+        if nuevo != valor:
+            cambios.append((rel, h))
+        return etiqueta.replace(f'content="{valor}"', f'content="{nuevo}"')
+
+    for prop in META_SELLABLES:
+        patron = (r'<meta\s+(?:property|name)="' + re.escape(prop)
+                  + r'"\s+content="([^"]+)"\s*>')
+        texto = re.sub(patron, sellar_meta, texto)
+
     return texto, cambios
 
 
@@ -76,4 +109,4 @@ if __name__ == "__main__":
         open(HTML, "w", encoding="utf-8").write(sellado)
         print(f"index.html actualizado — {len(cambios)} referencias selladas:")
         for ruta, h in cambios:
-            print(f"  {ruta:<34} v={h}")
+            print(f"  {ruta:<36} v={h}")

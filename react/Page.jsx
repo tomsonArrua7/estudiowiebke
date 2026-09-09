@@ -112,6 +112,12 @@ const HEALTH = [
    comparte sin imagen. Reemplazar SITIO por el dominio definitivo. */
 export const SITIO = "https://estudiowiebke.com.ar";
 
+/* Huella del contenido de og.png. Cloudflare cachea los estáticos diez años:
+   sin este parámetro, al regenerar el banner con el mismo nombre los
+   scrapers seguirían recibiendo el viejo desde el borde. La actualiza
+   tools/sellar-cache.py. */
+export const OG = `${SITIO}/og.png?v=dcf69a767d`;
+
 export const metadata = {
   title: "HERMANN WIEBKE — Abogado",
   description:
@@ -124,18 +130,18 @@ export const metadata = {
     title: "HERMANN WIEBKE — Abogado",
     description: "Derecho, urbanismo y operaciones inmobiliarias en La Plata.",
     images: [{
-      url: `${SITIO}/og.png`,
+      url: OG,
       width: 1200,
       height: 630,
       type: "image/png",
-      alt: "WIEBKE — Decisiones que requieren claridad.",
+      alt: "WIEBKE — Arquitectura y defensa jurídica para tus proyectos.",
     }],
   },
   twitter: {
     card: "summary_large_image",
     title: "HERMANN WIEBKE — Abogado",
     description: "Derecho, urbanismo y operaciones inmobiliarias en La Plata.",
-    images: [`${SITIO}/og.png`],
+    images: [OG],
   },
   icons: {
     icon: [

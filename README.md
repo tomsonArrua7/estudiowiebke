@@ -69,6 +69,20 @@ Si el archivo cambió, cambia su URL y el caché se renueva solo. Si no
 cambió, la URL es idéntica y los diez años juegan a favor. Sólo hay que
 purgar Cloudflare a mano si alguna vez se olvida este paso.
 
+Alcanza también a `og:image` y `twitter:image`, que van como URL absoluta.
+
+### Al cambiar el banner (og.png)
+
+Sellar la URL resuelve el caché de Cloudflare, **no el de las redes**:
+Facebook, WhatsApp y LinkedIn guardan su propia copia. Tras desplegar hay
+que refrescarla a mano, una vez, en cada una:
+
+- <https://developers.facebook.com/tools/debug/> → *Scrape Again*.
+  Sirve también para WhatsApp, que usa la misma caché.
+- <https://www.linkedin.com/post-inspector/> → *Inspect*.
+
+Hasta hacerlo, un enlace compartido sigue mostrando el banner anterior.
+
 ---
 
 ## Dominio
