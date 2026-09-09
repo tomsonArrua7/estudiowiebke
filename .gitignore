@@ -11,3 +11,10 @@ node_modules/
 
 # Inter TTF: lo descarga tools/generar-imagenes.py si falta. No se versiona.
 tools/InterVar.ttf
+
+# Foto original del cliente: material de trabajo, no se publica.
+fotos/
+
+# Caché de Python
+__pycache__/
+*.pyc

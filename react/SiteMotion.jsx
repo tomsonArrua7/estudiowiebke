@@ -83,6 +83,8 @@ export default function SiteMotion() {
     };
     retornos.forEach((a) => a.addEventListener("click", alVolver));
 
+
+
     /* --- 3 y 4. Encabezado, posición y sección activa ------------------ */
     const membrete = document.querySelector(".masthead-bleed");
     const filamento = document.querySelector(".spine-progress");

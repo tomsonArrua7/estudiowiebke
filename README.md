@@ -109,7 +109,10 @@ regla depende del nombre.
 **Paleta cerrada.** Sólo los seis colores del manual y alfas de ellos. Sin
 verdes, dorados, degradados ni sombras.
 
-**Times New Roman Italic.** Reservada a cuatro expresiones y marcada con la
-clase `.editorial`: «claridad.», «Criterio, estructura y medida.»,
-«y arquitectura» y «tu situación.». No agregar una quinta sin aprobación
-de marca.
+**Times New Roman Italic.** Reservada a **tres** expresiones y marcada con la
+clase `.editorial`: «proyectos.», «y arquitectura» y «tu situación.».
+No agregar una cuarta sin aprobación de marca.
+
+**Portada.** El brief v2 retiró el bloque «Derecho / Urbanismo» y el
+antetítulo «Asesoramiento jurídico». La columna derecha de la portada no se
+reemplazó por nada: el tercio derecho queda vacío a propósito.

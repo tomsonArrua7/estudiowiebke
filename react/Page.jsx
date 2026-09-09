@@ -5,8 +5,8 @@
    CONVENCIÓN TIPOGRÁFICA DEL PROYECTO
    La clase .editorial es el ÚNICO mecanismo para invocar Times New Roman
    Italic. El brief autoriza exactamente cuatro apariciones en todo el sitio:
-   «claridad.» · «Criterio, estructura y medida.» · «y arquitectura» ·
-   «tu situación.». No añadir una quinta sin aprobación de marca.
+   «proyectos.» · «y arquitectura» · «tu situación.». No añadir una cuarta
+   sin aprobación de marca.
 
    Este componente es de servidor. Todo el comportamiento vive en
    <SiteMotion />, que sí es de cliente.
@@ -85,13 +85,13 @@ const SERVICES = [
   ["01", "Sucesiones e inmuebles",
    "Declaratorias, particiones, regularización y disposición de bienes heredados."],
   ["02", "Compraventas y escrituración",
-   "Revisión documental, boletos, escrituras y seguridad jurídica de la operación."],
+   "Due Diligence inmobiliario: revisión documental, boletos, escrituras y seguridad jurídica de la operación."],
   ["03", "Alquileres y contratos",
-   "Redacción, revisión, cumplimiento y resolución de conflictos contractuales."],
+   "Redacción, revisión, cumplimiento e intervención judicial frente a conflictos contractuales."],
   ["04", "Propiedad y ocupaciones",
    "Conflictos posesorios, recupero de inmuebles y análisis de vías de regularización."],
   ["05", "Derecho urbanístico y administrativo",
-   "Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración."],
+   "Uso del suelo, obra privada, habilitaciones y actuaciones ante la Administración Provincial."],
   ["06", "Cuestiones ambientales",
    "Asesoramiento sobre regulación, autorizaciones y conflictos de incidencia ambiental."],
 ];
@@ -176,31 +176,20 @@ export default function Page() {
 
       {/* 02 — PORTADA */}
       <section className="hero page-shell">
-        <div className="hero-copy" data-reveal>
-          <p className="eyebrow" data-stagger style={{ "--d": "0ms" }}>
-            Asesoramiento jurídico
-          </p>
-
-          {/* Acento editorial 1/4 */}
-          <h1 data-stagger style={{ "--d": "90ms" }}>
-            Decisiones que requieren <em className="editorial">claridad.</em>
+        <div data-reveal>
+          {/* Acento editorial 1/3 */}
+          <h1 data-stagger style={{ "--d": "0ms" }}>
+            Arquitectura y defensa jurídica para tus{" "}
+            <em className="editorial">proyectos.</em>
           </h1>
 
-          <p className="hero-text" data-stagger style={{ "--d": "180ms" }}>
+          <p className="hero-text" data-stagger style={{ "--d": "110ms" }}>
             Abordaje integral de asuntos patrimoniales, inmobiliarios, urbanísticos y
-            ambientales. Análisis del problema, sus riesgos y las alternativas posibles.
+            ambientales. Asesoramiento e intervención judicial y administrativa.
           </p>
 
-          <div className="hero-actions" data-stagger style={{ "--d": "260ms" }}>
+          <div className="hero-actions" data-stagger style={{ "--d": "210ms" }}>
             <Action>Consultar por WhatsApp</Action>
-          </div>
-        </div>
-
-        {/* Columna de apoyo: puramente tipográfica, sin monograma ni planos. */}
-        <div className="hero-system" data-reveal>
-          <div className="hero-disciplines">
-            <span><i>01</i> Derecho</span>
-            <span><i>02</i> Urbanismo</span>
           </div>
         </div>
       </section>
@@ -212,8 +201,6 @@ export default function Page() {
             <p className="eyebrow">01 / Áreas de consulta</p>
             <h2 id="services-title">¿En qué puedo ayudarte?</h2>
           </div>
-          {/* Acento editorial 2/4 */}
-          <p className="section-note editorial">Criterio, estructura y medida.</p>
         </div>
 
         <div className="service-grid">
@@ -236,7 +223,7 @@ export default function Page() {
         <div className="health-practice page-shell">
           <div className="health-heading" data-reveal>
             <p className="eyebrow">02 / Área especializada</p>
-            {/* Acento editorial 3/4 */}
+            {/* Acento editorial 2/3 */}
             <h2 id="health-title">
               Derecho sanitario <em className="editorial">y arquitectura</em>
             </h2>
@@ -264,8 +251,8 @@ export default function Page() {
       <section className="contact-wrap bleed" id="contacto">
         <div className="contact page-shell" aria-labelledby="contact-title">
           <div data-reveal>
-            <p className="eyebrow">03 / Primera conversación</p>
-            {/* Acento editorial 4/4 */}
+            <p className="eyebrow">03 / Primera conversación.</p>
+            {/* Acento editorial 3/3 */}
             <h2 id="contact-title">
               Contame brevemente <em className="editorial">tu situación.</em>
             </h2>
